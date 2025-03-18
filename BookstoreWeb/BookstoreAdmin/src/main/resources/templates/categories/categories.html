@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Categories - Book.store Admin', 'none')">
+</head>
+
+<body>
+
+	<div class="row">
+		<div class="col-md-2"  style="background: #4e73df; background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);">
+			<div class="container-fluid">
+				<div th:replace="navigation :: menu"></div>
+			</div>
+		</div>
+		<div class="col-md-10 p-3">
+			<div class="row">
+				<!-- Navbar header -->
+				<div class="col-12">
+					<div class="container-fluid">
+						<div th:replace="nav_header :: nav_header('Quản Lí Thể Loại', '')"></div>
+					</div>
+
+				</div>
+
+				<div class="col-12">
+					<div class="container-fluid">
+						<div style="min-height: calc(100vh - 200px);">
+							<!-- Table -->
+							<div class="card my-4 pb-3">
+								<div class="d-flex justify-content-between align-items-baseline">
+									<!-- Action list -->
+									<div class="d-flex justify-content-between align-items-center mt-3 mx-3">
+										<div>
+											<a th:href="@{/categories/new}" class="btn btn-dark btn-xl">
+												<i class="fas fa-plus"></i> Thêm Mới
+											</a>
+											<a th:href="@{/categories/export/csv}" class="btn btn-dark btn-xl ml-2">
+												<i class="fas fa-file-csv"></i> Xuất CSV
+											</a>
+										</div>
+									</div>
+
+									<!-- Search -->
+									<div class="search-action mx-3">
+										<div th:replace="fragments :: seach_form_and_message('/categories/page/1')">
+										</div>
+									</div>
+								</div>
+								<!-- Error message -->
+								<div class="row">
+									<div class="col-5 ml-auto">
+										<div th:if="${errorMessage}" class="alert alert-danger">
+											<span th:text="${errorMessage}"></span>
+										</div>
+									</div>
+								</div>
+
+								<!-- Core table -->
+								<div class="card-body px-0 pb-2">
+									<div class="table-responsive p-0">
+										<table class="table align-items-center mb-0">
+											<thead>
+												<tr>
+													<th
+														class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center">
+														ID</th>
+													<th
+														class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center">
+														Hình ảnh</th>
+													<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+														th:replace="fragments :: column_link('/categories', 'name', 'Tên thể loại', 'none')">
+													</th>
+													<th
+														class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center">
+														Alias</th>
+													<th
+														class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center">
+														Enabled</th>
+													<th
+														class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+														Hành động</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="cat : ${listCategories}">
+													<td class="text-center">[[${cat.id}]]</td>
+													<td class="text-center">
+														<img th:src="@{${cat.imagePath}}" style="width: 80px;"
+															class="img-fluid">
+													</td>
+													<td class="text-center">[[${cat.name}]]</td>
+													<td class="hideable-column text-center">[[${cat.alias}]]</td>
+													<td class="text-center">
+														<div
+															th:replace="fragments :: status(${cat.enabled}, 'category', '/categories/' + ${cat.id})">
+														</div>
+													</td>
+													<td>
+														<div
+															th:replace="fragments :: edit('category', '/categories/edit/' + ${cat.id})">
+														</div>
+														&nbsp;
+														<div
+															th:replace="fragments :: delete('category', ${cat.id}, '/categories/delete/' + ${cat.id}, ${!cat.hasChildren})">
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+								<div th:if="${keyword != null}" class="text-center">
+									<span>Search result does not show categories in hierarchical form</span>
+									<div th:replace="fragments :: pagination('/categories', 'categories')"></div>
+								</div>
+
+								<th:block th:unless="${keyword != null}">
+									<div th:replace="fragments :: pagination('/categories', 'top-level categories')">
+									</div>
+								</th:block>
+
+								<div th:replace="modal_fragments :: confirm_modal"></div>
+							</div>
+						</div>
+
+						<div th:replace="fragments :: footer"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+	<script th:src="@{/js/common_list.js}"></script>
+	<script type="text/javascript">
+		moduleURL = "[[@{/categories}]]";
+
+		$(document).ready(function () {
+			$(".link-delete").on("click", function (e) {
+				e.preventDefault();
+				showDeleteConfirmModal($(this), 'category');
+			});
+		});
+	</script>
+
+</body>
+
+</html>

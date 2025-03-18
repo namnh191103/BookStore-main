@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Thông tin tài khoản', 'none')">
+</head>
+<style>
+    body {
+        background-color: #e0f7fa; /* Màu xanh nước biển nhạt */
+    }
+    h2 {
+        color: #00796b; /* Màu xanh đậm */
+        margin-bottom: 20px;
+    }
+    .avatar-preview {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 15px;
+    }
+    .avatar-container {
+        display: flex;
+        align-items: center;
+    }
+    .btn-primary {
+        background-color: #00796b; /* Màu xanh đậm */
+        border-color: #00796b; /* Màu xanh đậm */
+    }
+    .btn-primary:hover {
+        background-color: #004d40; /* Màu xanh đậm hơn khi hover */
+        border-color: #004d40;
+    }
+    .form-label {
+        font-weight: bold;
+        color: #00796b; /* Màu xanh đậm */
+    }
+    .form-control {
+        border-radius: 5px;
+        border: 1px solid #00796b;
+    }
+    .form-control:focus {
+        border-color: #004d40; /* Màu xanh đậm hơn khi focus */
+        box-shadow: 0 0 5px rgba(0, 121, 107, 0.5);
+    }
+</style>
+<body>
+
+<div class="row">
+    <div class="col-2"  style="background: #4e73df; background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);">
+        <div class="container-fluid">
+            <div th:replace="navigation :: menu"></div>
+        </div>
+    </div>
+    <div class="col-10 p-3">
+        <div class="row">
+            <!-- Navbar header -->
+            <div class="col-12">
+                <div class="container-fluid">
+                    <div th:replace="nav_header :: nav_header('Quản lí người dùng > ', 'Chi tiết tài khoản')"></div>
+                </div>
+
+            </div>
+
+            <div class="col-12">
+                <div class="container-fluid">
+                    <div style="min-height: calc(100vh - 200px);">
+                        <!-- Table -->
+                        <div class="card my-4 p-3">
+                            <div class="text-center">
+                                <h2>Chi Tiết Tài Khoản</h2>
+                            </div>
+
+                            <div th:if="${message!= null}" class="alert alert-success text-center">
+                                [[${message}]]
+                            </div>
+                            <form th:action="@{/account/update}" method="post" enctype="multipart/form-data" th:object="${user}">
+                                <input type="hidden" th:field="*{id}"/>
+                                <div class="mb-3">
+                                    <label class="form-label">E-mail</label>
+                                    <input type="email" class="form-control" th:field="*{email}" readonly="readonly"/>
+                                </div>
+                                <div class="mb-3 row">
+                                    <div class="col">
+                                        <label class="form-label">Họ</label>
+                                        <input type="text" class="form-control" th:field="*{firstName}" required
+                                               minlength="2" maxlength="45"/>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label">Tên</label>
+                                        <input type="text" class="form-control" th:field="*{lastName}" required
+                                               minlength="2" maxlength="45"/>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label  class="form-label">Mật Khẩu</label>
+                                    <input type="password" th:field="*{password}" class="form-control"
+                                           placeholder="Leave blank if you don't want to change password"
+                                           minlength="8" maxlength="20"
+                                           oninput="checkPasswordMatch(document.getElementById('confirmPassword'))"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirmPassword" class="form-label">Nhập Lại Mật Khẩu</label>
+                                    <input type="password" id="confirmPassword" class="form-control" minlength="8"
+                                           maxlength="20" oninput="checkPasswordMatch(this)"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Vai Trò</label>
+                                    <span class="form-control"><b>[[${user.roles}]]</b></span>
+                                </div>
+                                <div class="mb-3 avatar-container">
+                                    <img id="avatarPreview" class="avatar-preview" th:src="@{${user.photosImagePath}}"
+                                         alt="Ảnh Đại Diện">
+                                    <div>
+                                        <label class="form-label">Ảnh Đại Diện</label>
+                                        <input type="hidden" th:field="*{photos}"/>
+                                        <input type="file" id="fileImage" name="image"
+                                               accept="image/png, image/jpeg, image/jpg" class="form-control"
+                                               onchange="previewImage(event)">
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <input type="submit" value="Lưu" class="btn btn-primary m-3"/>
+                                    <input type="button" value="Thoát" class="btn btn-secondary" id="buttonCancel"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div th:replace="fragments :: footer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    moduleURL = "[[@{/}]]";
+
+    function checkPasswordMatch(confirmPassword) {
+        if (confirmPassword.value != $("#password").val()) {
+            confirmPassword.setCustomValidity("Passwords do not match!");
+        } else {
+            confirmPassword.setCustomValidity("");
+        }
+    }
+     function previewImage(event) {
+        const preview = document.getElementById('avatarPreview');
+        preview.src = URL.createObjectURL(event.target.files[0]);
+    }
+</script>
+<script th:src="@{/js/common_form.js}"></script>
+</body>
+
+</html>

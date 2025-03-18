@@ -1,0 +1,32 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "RandomPasswordGeneratorGUI",
+            "request": "launch",
+            "mainClass": "com.bookstore.admin.order.RandomPasswordGeneratorGUI",
+            "projectName": "BookstoreAdmin"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BookstoreSiteApplication<BookstoreSite>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.bookstore.BookstoreSiteApplication",
+            "projectName": "BookstoreSite",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=57151 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=BookstoreSite"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BookstoreAdminApplication<BookstoreAdmin>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.bookstore.admin.BookstoreAdminApplication",
+            "projectName": "BookstoreAdmin",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

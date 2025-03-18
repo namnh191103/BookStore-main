@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Giỏ hàng', 'none')" />
+
+<body>
+    <div th:replace="navigation :: header_menu"></div>
+
+    <div class="container-fluid" style="min-height: calc(100vh - 245px);">
+        <div class="container my-3">
+            <div class="text-center mb-4">
+                <h2>Giỏ hàng</h2>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 mr-4">
+                    <th:block th:each="item, status : ${cartItems}">
+                        <div th:id="'row' + ${status.count}" class="row border rounded p-3 mb-3 shadow-sm justify-content-between"
+                            th:with="product = ${item.product}">
+                            <div class="col-1 d-flex flex-column align-items-center justify-content-center">
+                                <div class="divCount mb-2">[[${status.count}]]</div>
+                                <div>
+                                    <a th:rowNumber="${status.count}"
+                                        class="fas fa-trash icon-dark linkRemove text-danger"
+                                        th:href="@{'/cart/remove/' + ${product.id}}"></a>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <img th:src="@{${item.product.mainImagePath}}" class="img-fluid rounded fixed-size-img" style="max-height: 210px;">
+                            </div>
+                            <div style="width: 64%;">
+                                <div>
+                                    <a th:title="${product.name}" th:href="@{'/p/' + ${product.alias}}" target="_blank"
+                                        class="text-dark"><b>[[${product.shortName}]]</b></a>
+                                </div>
+                                <div th:replace="cart/quantity_control :: quantity_control(${item.quantity}, ${product.id}, ${product.quantity})"
+                                    class="my-2"></div>
+                                <div>
+                                    <!-- <span>X&nbsp;</span> -->
+                                    <div th:replace="product/product_fragment :: product_price" class="d-inline"></div>
+                                </div>
+                                <div>
+                                    <span>=&nbsp;</span>
+                                    <span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}"
+                                        th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+                                    <span th:id="'subtotal' + ${product.id}"
+                                        class="h4 subtotal">[[${#numbers.formatDecimal(item.subtotal, 1,
+                                        THOUSANDSL_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]</span>
+                                    <span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}"
+                                        th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+
+                <div class="col-sm-3" th:unless="${#lists.isEmpty(cartItems)}" id="sectionTotal">
+                    <div class="rounded shadow-sm p-3" style="box-shadow: rgba(111, 111, 111, 0.35) 0px 5px 15px;">
+                        <div class="card-body text-center">
+                            <!-- <div>
+                                <span class="h3">Tổng tiền:</span>
+                            </div> -->
+                            <div class="mt-2">
+                                <span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}"
+                                    th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+                                <span id="total" class="h3">[[${#numbers.formatDecimal(estimatedTotal, 1,
+                                    THOUSANDSL_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE)}]]</span>
+                                <span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}"
+                                    th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+                            </div>
+                            <div class="mt-2">
+                                <div th:if="${shippingSupported}">
+                                    <form th:action="@{/checkout}">
+                                        <button class="btn btn-danger p-3 mt-2">Đặt hàng</button>
+                                    </form>
+                                </div>
+
+
+
+                                <div th:unless="${shippingSupported}">
+                                    <div><span class=" text-secondary">Địa chỉ không được hỗ trợ giao hàng</span>
+                                    </div>
+
+                                    <div th:if="${usePrimaryAddressAsDefault}">
+                                        <a th:href="@{/account_details(redirect=cart)}" class="h6">Cập nhật địa chỉ</a>
+                                    </div>
+
+                                    <div th:unless="${usePrimaryAddressAsDefault}">
+                                        <a th:href="@{/address_book(redirect=cart)}" class="h6">Sử dụng địa chỉ khác</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sectionEmptyCartMessage"
+                th:class=" 'text-center ' + (${#lists.isEmpty(cartItems)} ? '' : 'd-none')">
+                <h4>Không có sản phẩm trong giỏ hàng</h4>
+            </div>
+        </div>
+
+
+
+
+        <div th:replace="fragments :: modal_dialog"></div>
+        <div>
+
+        </div>
+    </div>
+    <div th:replace="navigation :: footer_menu"></div>
+
+    <script>
+        contextPath = "[[@{/}]]";
+        var csrfHeaderName = "[[${_csrf.headerName}]]";
+        var csrfValue = "[[${_csrf.token}]]";
+    </script>
+    <script th:src="@{js/common_modal.js}"></script>
+    <script th:src="@{js/shopping_cart.js}"></script>
+    <script th:src="@{js/jquery.number.min.js}"></script>
+</body>
+
+</html>

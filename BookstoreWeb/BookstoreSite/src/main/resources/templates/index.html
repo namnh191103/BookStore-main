@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<head th:replace="fragments :: page_head(${pageTitle}, 'tag')" />
+<link th:href="@{/star-rating/css/star-rating.css}" media="all"
+	rel="stylesheet" type="text/css" />
+<script th:src="@{/star-rating/js/star-rating.js}"
+	type="text/javascript"></script>
+<link th:href="@{/star-rating/themes/krajee-svg/theme.css}" media="all"
+	rel="stylesheet" type="text/css" />
+<script th:src="@{/star-rating/themes/krajee-svg/theme.js}"></script>
+</head>
+
+<body>
+	<div th:replace="navigation :: header_menu"></div>
+	<!-- Card with Slideshow -->
+
+	<div class="">
+		<div id="saleBookCarousel" class="carousel slide" data-ride="carousel">
+			<div class="carousel-inner">
+				<!-- Example of a single slide -->
+				<div class="carousel-item active">
+					<div class="d-block w-100"
+						style="background-color: black; height: 500px; position: relative;">
+						<img th:src="@{/images/1.png}" alt="" class="carousel-image">
+						<div class="carousel-caption d-none d-md-block">
+							<!-- <h5 style="color: white;">Flash Sale Summer</h5>
+							<p style="color: white;">🥵🥵🥵</p> -->
+						</div>
+					</div>
+				</div>
+
+				<div class="carousel-item">
+					<div class="d-flex justify-content-center align-items-center w-100"
+						style="background-color: black; height: 500px;">
+						<div class="text-center">
+							<h5 style="color: white;">Chào mừng đến với Book.Store</h5>
+							<p style="color: white;">Điểm đến lý tưởng cho những cuốn
+								sách hay và nhiều hơn nữa.</p>
+							<p style="color: white;">Chúng tôi cung cấp một loạt các thể
+								loại sách từ tiểu thuyết, khoa học, đến sách thiếu nhi.</p>
+							<p style="color: white;">Khám phá ngay những tựa sách bán
+								chạy nhất của chúng tôi!</p>
+							<i class="fas fa-book-open"
+								style="color: white; font-size: 2rem;"></i>
+						</div>
+					</div>
+				</div>
+
+				<!-- Add more slides as needed -->
+			</div>
+			<a class="carousel-control-prev" href="#saleBookCarousel"
+				role="button" data-slide="prev"> <span
+				class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+				class="sr-only">Previous</span>
+			</a> <a class="carousel-control-next" href="#saleBookCarousel"
+				role="button" data-slide="next"> <span
+				class="carousel-control-next-icon" aria-hidden="true"></span> <span
+				class="sr-only">Next</span>
+			</a>
+		</div>
+	</div>
+	<div class="marquee mt-5">
+		<div class="track">
+			<div class="content">
+				<a class="navbar-brand mx-6" th:href="@{/}"> <img
+					th:src="@{${SITE_LOGO}}" width="200" alt="Logo" />
+				</a> <a class="navbar-brand mx-6" th:href="@{/}"> <img
+					th:src="@{${SITE_LOGO}}" width="200" alt="Logo" />
+				</a> <a class="navbar-brand mx-6" th:href="@{/}"> <img
+					th:src="@{${SITE_LOGO}}" width="200" alt="Logo" />
+				</a> <a class="navbar-brand mx-6" th:href="@{/}"> <img
+					th:src="@{${SITE_LOGO}}" width="200" alt="Logo" />
+				</a>
+			</div>
+		</div>
+	</div>
+	<!-- Card for Categories -->
+	<div class="wrap-content row justify-content-evenly">
+		<div class="mt-3 col-8">
+			<div class="text-black px-4 bg-white-milk">
+				<h3 class="d-flex align-items-center">
+					<i class="fas fa-star" style="color: #c62026;"></i> <span
+						class="ml-2 text-black">Giá tốt</span>
+
+				</h3>
+			</div>
+
+
+
+			<div th:each="row : ${bestSellersPartitions}" class="row">
+
+				<div class="col-6 col-md-4 col-lg-3 mb-4" th:each="product : ${row}">
+					<div class="cards mt-4 ml-4">
+						<article class="card">
+							<div class="card__info-hover">
+								<svg class="card__like" viewBox="0 0 24 24">
+									<path fill="#000000"
+										d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z" />
+								</svg>
+								<div class="card__clock-info">
+									<svg class="card__clock" viewBox="0 0 24 24">
+										<path
+											d="M12,20A7,7 0 0,1 5,13A7,7 0 0,1 12,6A7,7 0 0,1 19,13A7,7 0 0,1 12,20M19.03,7.39L20.45,5.97C20,5.46 19.55,5 19.04,4.56L17.62,6C16.07,4.74 14.12,4 12,4A9,9 0 0,0 3,13A9,9 0 0,0 12,22C17,22 21,17.97 21,13C21,10.88 20.26,8.93 19.03,7.39M11,14H13V8H11M15,1H9V3H15V1Z" />
+									</svg>
+									<span class="card__time"></span>
+								</div>
+
+							</div>
+							<div class="card__img"></div>
+							<a th:href="@{'/p/' + ${product.alias}}" class="card_link">
+								<div class="card__img--hover">
+									<img th:src="@{${product.mainImagePath}}" class="card-img-top"
+										style="max-width: 100%; max-height: 200px; object-fit: contain;"
+										alt="[[${product.shortName}]]">
+
+								</div>
+							</a>
+							<div class="card__info">
+								<span class="card__category">
+									<div th:replace="product/product_fragment :: product_price"
+										class="card-body d-flex justify-content-center align-items-center"></div>
+								</span>
+								<h5 class="card-title">[[${product.shortName}]]</h5>
+
+								<div class="d-flex justify-content-center">
+									<table>
+										<tr>
+											<td><input type="text"
+												class="product-detail-rating-star" dir="ltr" data-size="xs"
+												th:value="${product.averageRating}" /></td>
+											<td><small>[[${product.reviewCount}]]</small></td>
+										</tr>
+									</table>
+								</div>
+								<div class="progress-container mt-4">
+									<div class="progress-bar warning"
+										th:style="'width: ' + ${product.quantity} + '%;'">
+										<span th:text="'Số lượng ' + ${product.quantity}"></span>
+									</div>
+								</div>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="mt-3 col-3">
+			<div class="text-black px-4 bg-white-milk">
+				<h3 class="d-flex align-items-center">
+					<div
+						style="background-size: contain; height: 32px; width: 32px; background: url('https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_menu_red.svg') no-repeat center center;">
+					</div>
+					<span class="ml-2 text-black">Danh mục</span>
+
+				</h3>
+			</div>
+
+			<div class="pt-0">
+				<div class="overflow-auto">
+					<ul class="category-item text-center col-4 mt-4"
+						style="min-width: 100%;" th:each="cat : ${listCategories}">
+						<li><a class="text-dark d-flex"
+							th:href="@{'/c/' + ${cat.alias}}">
+								<div>
+									<img class="img-fluid rounded"
+										style="width: 60px; height: 60px;"
+										th:src="@{${cat.imagePath}}">
+								</div>
+								<div class="mt-2 m-2">[[${cat.name}]]</div>
+						</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+
+	</div>
+	<div th:replace="navigation :: footer_menu"></div>
+
+	<script>
+		$(".product-detail-rating-star").rating({
+			displayOnly: true,
+			hoverOnClera: false,
+			showCaption: false,
+			theme: 'krajee-svg'
+		});
+
+		function formatRatingNumber() {
+			ratingText = $("#ratingNumber").text();
+			formattedRating = $.number(ratingText, 2, decimalSeparator, thousandSeparator);
+			$("#ratingNumber").text(formattedRating);
+		}	
+	</script>
+
+</body>
+
+</html>

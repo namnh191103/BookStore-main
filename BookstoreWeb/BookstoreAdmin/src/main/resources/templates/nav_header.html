@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body class="g-sidenav-show bg-gray-100">
+
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+     id="navbarBlur" data-scroll="true" th:fragment="nav_header(title, subtitle)">
+    <div class="container-fluid py-1">
+        <nav aria-label="nav-title">
+            <h5 th:if="${subtitle != null}" th:text="${title} + ${subtitle}"></h5>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+            <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+
+            </div>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown no-arrow">
+                    <div>
+                        <span sec:authentication="principal.fullname">UserName</span>
+                        <i class="fa fa-user-circle" style="font-size: x-large;"></i>
+
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            <a class="dropdown-item" th:href="@{/account}">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profile
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"
+                               id="logoutLink">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</body>
+
+</html>

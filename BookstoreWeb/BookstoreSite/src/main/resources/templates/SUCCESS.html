@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Book.store', 'none')" />
+
+<body>
+	<div th:replace="navigation :: header_menu"></div>
+	<div class="container-fluid">
+
+		<div class="text-center border border-secondary rounded m-3 p-3">
+			<h2>Đơn hàng của bạn đã được hoàn tất!</h2>
+			<h4>Chúng tôi đã gửi một email đến bạn.</h4>
+			<h4>Vui lòng kiểm tra email của bạn để biết thêm chi tiết.</h4>
+		</div>
+
+
+
+	</div>
+	<div th:replace="navigation :: footer_menu"></div>
+</body>
+
+</html>

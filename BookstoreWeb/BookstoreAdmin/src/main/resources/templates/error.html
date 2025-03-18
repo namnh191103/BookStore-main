@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="fragments :: page_head('Lỗi - Book.store Admin', 'none')">
+</head>
+<body>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Sidebar Menu -->
+            <div class="col-md-2 bg-light p-3">
+                <div th:replace="navigation :: menu"></div>
+            </div>
+    
+            <!-- Main Content -->
+            <div class="col-md-10">
+                <div class="container py-4">
+                    <div class="mb-4">
+                        <h2>Rất tiếc, đã xảy ra lỗi không mong muốn</h2>
+                    </div>
+    
+                    <!-- Footer -->
+                    <div th:replace="fragments :: footer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+  
+  
+</div>
+
+</body>
+</html>

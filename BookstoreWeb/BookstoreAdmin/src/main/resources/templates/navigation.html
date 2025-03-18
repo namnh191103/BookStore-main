@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="menu">
+    <form th:action="@{/logout}" method="post" th:hidden="true"
+          name="logoutForm">
+        <input type="submit"/>
+    </form>
+
+
+    <ul class="navbar-nav sidebar sidebar-dark accordion   my-3 fixed-start ms-3" id="accordionSidebar">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/}"
+           th:src="@{/images/YY.png}">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fa fa-book"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">Bookstore Admin</div>
+        </a>
+
+        <hr class="horizontal light mt-0 mb-2">
+
+        <div class="dash-navbar-left nb-visible">
+            <ul class="nb-nav navbar-nav custom-dropdown">
+                <th:block sec:authorize="hasAuthority('Admin')">
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#users"
+                           aria-expanded="true" aria-controls="collapseTwo">
+                            <i class="fas fa-users"></i>
+                            <span>Người dùng</span>
+                        </a>
+                        <div id="users" class="collapse" aria-labelledby="headingTwo"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" th:href="@{/users/new}">Tạo mới</a>
+                                <a class="collapse-item" th:href="@{/users}">Xem tất cả</a>
+                            </div>
+                        </div>
+                    </li>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#categories"
+                           aria-expanded="true" aria-controls="collapseTwo">
+                            <i class="fas fa-tags"></i>
+                            <span>Thể loại</span>
+                        </a>
+                        <div id="categories" class="collapse" aria-labelledby="headingTwo"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" th:href="@{/categories/new}">Tạo mới</a>
+                                <a class="collapse-item" th:href="@{/categories}">Xem tất cả</a>
+                            </div>
+                        </div>
+                    </li>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('Admin', 'Editor')">
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#brands"
+                           aria-expanded="true" aria-controls="collapseTwo">
+                            <i class="fas fa-building"></i>
+                            <span>Nhà xuất bản</span>
+                        </a>
+                        <div id="brands" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" th:href="@{/brands/new}">Tạo mới</a>
+                                <a class="collapse-item" th:href="@{/brands}">Xem tất cả</a>
+                            </div>
+                        </div>
+                    </li>
+                </th:block>
+
+                <th:block
+                        sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Editor', 'Shipper')">
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#products"
+                           aria-expanded="true" aria-controls="collapseUtilities">
+                            <i class="fas fa-box"></i>
+                            <span>Sản phẩm</span>
+                        </a>
+                        <div id="products" class="collapse" aria-labelledby="headingUtilities"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" th:href="@{/products/new}">Tạo mới</a>
+                                <a class="collapse-item" th:href="@{/products}">Xem tất cả</a>
+                                <a class="collapse-item" th:href="@{/reviews}">Đánh giá</a>
+                            </div>
+                        </div>
+                    </li>
+                </th:block>
+
+                <th:block sec:authorize="hasAuthority('Assistant')">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/reviews}">
+                            <i class="fa-solid fa-ranking-star"></i>
+                            <span>Đánh giá</span></a>
+                    </li>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/customers}">
+                            <i  class="fas fa-users"></i>
+                            <span>Khách hàng</span></a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/shipping_rates}">
+                            <i class="fas fa-truck"></i>
+                            <span>Giao hàng</span></a>
+                    </li>
+                </th:block>
+
+                <th:block
+                        sec:authorize="hasAnyAuthority('Admin', 'Salesperson', 'Shipper')">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/orders}">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span>Đơn hàng</span></a>
+                    </li>
+                </th:block>
+
+                <th:block sec:authorize="hasAnyAuthority('Admin', 'Salesperson')">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/reports}">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Báo cáo kinh doanh</span></a>
+                    </li>
+                </th:block>
+
+                <th:block sec:authorize="hasAuthority('Admin')">
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#setting"
+                           aria-expanded="true" aria-controls="collapseUtilities">
+                            <i class="fas fa-cogs"></i>
+                            <span>Cài đặt</span>
+                        </a>
+                        <div id="setting" class="collapse" aria-labelledby="headingUtilities"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item"  th:href="@{/settings}">Cài đặt chung</a>
+                                <a class="collapse-item"  th:href="@{/settings#general}" sec:authorize="hasAnyAuthority('Admin', 'Editor')" >Tạo mới</a>
+                                <a class="collapse-item"  th:href="@{/settings#cities}">Thành phố</a>
+                                <a class="collapse-item"  th:href="@{/settings#districts}">Quận</a>
+                                <a class="collapse-item"  th:href="@{/settings#mailServer}">Mail Server</a>
+                                <a class="collapse-item"  th:href="@{/settings#mailTemplates}">Mail Templates</a>
+                                <a class="collapse-item"  th:href="@{/settings#payment}">Payment</a>
+                            </div>
+                        </div>
+                    </li>
+                </th:block>
+
+                <th:block>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/account}">
+                            <i class="fas fa-user-cog"></i>
+                            <span>Tài khoản</span></a>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+    </ul>
+</div>
+
+
+</body>
+</html>

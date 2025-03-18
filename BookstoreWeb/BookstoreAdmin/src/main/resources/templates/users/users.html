@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Users - Book.store Admin', 'none')">
+</head>
+
+<body>
+	<div class="row">
+		<div class="col-md-2"  style="background: #4e73df; background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);">
+			<div class="container-fluid">
+				<div th:replace="navigation :: menu"></div>
+			</div>
+		</div>
+		<div class="col-md-10 p-3">
+			<div class="row">
+				<!-- Navbar header -->
+				<div class="col-12">
+					<div class="container-fluid">
+						<div th:replace="nav_header :: nav_header('Quản Lí Người Dùng', '')"></div>
+					</div>
+
+				</div>
+				<div class="col-12">
+					<div class="container-fluid">
+						<div style="min-height: calc(100vh - 200px);">
+							<!-- Table -->
+							<div class="card my-4">
+								<div class="d-flex justify-content-between align-items-baseline">
+									<!-- Action list -->
+									<div class="d-flex justify-content-between align-items-center mt-3 mx-3">
+										<div>
+											<a th:href="@{/users/new}" class="btn btn-dark btn-xl">
+												<i class="fas fa-plus"></i> Thêm Mới
+											</a>
+											<a th:href="@{/users/export/csv}" class="btn btn-dark btn-xl ml-2">
+												<i class="fas fa-file-csv"></i> Xuất CSV
+											</a>
+											<a th:href="@{/users/export/excel}" class="btn btn-dark btn-xl ml-2">
+												<i class="fas fa-file-excel"></i> Xuất Excel
+											</a>
+											<a th:href="@{/users/export/pdf}" class="btn btn-dark btn-xl ml-2">
+												<i class="fas fa-file-pdf"></i> Xuất PDF
+											</a>
+										</div>
+									</div>
+
+									<!-- Search -->
+									<div class="search-action mx-3">
+										<div th:replace="fragments :: seach_form_and_message('/users/page/1')"></div>
+									</div>
+								</div>
+
+								<!-- Core table -->
+								<div class="card-body px-0 pb-2">
+									<div class="table-responsive p-0">
+										<table class="table align-items-center mb-0">
+											<thead>
+												<tr>
+													<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+														th:replace="fragments :: column_link('/users', 'id', 'ID', 'none')">
+													</th>
+													<th
+														class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center">
+														Hình Ảnh
+													</th>
+													<th th:replace="fragments :: column_link('/users', 'email', 'Email', 'none')"
+														class="text-uppercase text-secondary text-xs font-weight-bolder
+														opacity-7">
+													</th>
+													<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+														th:replace="fragments :: column_link('/users', 'firstName', 'Họ', 'none')">
+													</th>
+													<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+														th:replace="fragments :: column_link('/users', 'lastName', 'Tên', 'none')">
+													</th>
+													<th
+														class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+														Vai trò</th>
+													<th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+														th:replace="fragments :: column_link('/users', 'enabled', 'Enable', 'none')">
+													</th>
+													<th
+														class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+														Hành Động</th>
+
+													<th class="text-secondary opacity-7"></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="user : ${listUsers}">
+													<td class="text-center">[[${user.id}]]</td>
+													<td class="text-center">
+														<div th:replace="fragments :: user_photos"></div>
+													</td>
+													<td>[[${user.email}]]</td>
+													<td class="text-center">[[${user.firstName}]]</td>
+													<td class="text-center">[[${user.lastName}]]</td>
+													<td class="text-center">[[${user.roles}]]</td>
+													<td class="text-center">
+														<div
+															th:replace="fragments :: status(${user.enabled}, 'user', '/users/' + ${user.id})">
+														</div>
+													</td>
+													<td class="text-center">
+														<div
+															th:replace="fragments :: edit('user', '/users/edit/' + ${user.id})" />
+
+														<div
+															th:replace="fragments :: delete('user', ${user.id}, '/users/delete/' + ${user.id}, true)" />
+
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+								<!-- Pagination -->
+								<div th:replace="fragments :: pagination('/users', 'users')"></div>
+								<div th:replace="modal_fragments :: confirm_modal"></div>
+							</div>
+
+
+						</div>
+
+						<div th:replace="fragments :: footer"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<script th:src="@{/js/common_list.js}"></script>
+	<script type="text/javascript">
+		moduleURL = "[[@{/users}]]";
+
+		$(document).ready(function () {
+			$(".link-delete").on("click", function (e) {
+				e.preventDefault();
+				showDeleteConfirmModal($(this), 'user');
+			});
+		});
+	</script>
+
+</body>
+
+</html>

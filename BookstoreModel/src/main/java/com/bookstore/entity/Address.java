@@ -1,0 +1,38 @@
+package com.bookstore.entity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "address")
+public class Address extends AbstractAdressWithCity {
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer; 
+
+    @Column(name = "default_address")
+    private boolean defaultForShipping;
+
+
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public boolean isDefaultForShipping() {
+        return defaultForShipping;
+    }
+
+    public void setDefaultForShipping(boolean defaultForShipping) {
+        this.defaultForShipping = defaultForShipping;
+    }
+    
+}

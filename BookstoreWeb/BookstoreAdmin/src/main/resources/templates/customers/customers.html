@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Khách hàng - Bookstore Admin', 'none')" />
+
+<body>
+	<div class="row">
+		<div class="col-md-2"  style="background: #4e73df; background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);">
+			<div class="container-fluid">
+				<div th:replace="navigation :: menu"></div>
+			</div>
+		</div>
+		<div class="col-md-10 p-3">
+			<div class="row">
+				<!-- Navbar header -->
+				<div class="col-12">
+					<div class="container-fluid">
+						<div th:replace="nav_header :: nav_header('Quản Lí Khách Hàng', '')"></div>
+					</div>
+
+				</div>
+
+				<div class="col-12">
+					<div class="container-fluid">
+						<div style="min-height: calc(100vh - 200px);">
+							<!-- Table -->
+							<div class="card my-4">
+								<div class="d-flex justify-content-between align-items-baseline">
+									<!-- Action list -->
+									<div class="d-flex justify-content-between align-items-center mt-3 mx-3">
+										<div>
+											<a th:href="@{/customers/export/csv}" class="btn btn-dark btn-xl">
+												<i class="fas fa-file-csv"></i> Xuất CSV
+											</a>
+										</div>
+									</div>
+
+									<!-- Search -->
+									<div class="search-action mx-3">
+										<div th:replace="fragments :: seach_form_and_message('/customers/page/1')">
+										</div>
+									</div>
+								</div>
+
+								<!-- Core table -->
+								<div class="card-body px-0 pb-2">
+									<div class="table-responsive p-0">
+										<table class="table align-items-center mb-0">
+											<thead>
+												<tr>
+													<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+														th:replace="fragments :: column_link('/customers', 'id', 'ID', 'none')">
+													</th>
+													<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+														th:replace="fragments :: column_link('/customers', 'lastName', 'Họ', 'none')">
+													</th>
+													<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+														th:replace="fragments :: column_link('/customers', 'firstName', 'Tên', 'none')">
+													</th>
+													<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+														th:replace="fragments :: column_link('/customers', 'email', 'E-mail', 'none')">
+													</th>
+													<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+														th:replace="fragments :: column_link('/customers', 'ward', 'Phường', 'none')">
+													</th>
+													<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+														th:replace="fragments :: column_link('/customers', 'district', 'Quận', 'none')">
+													</th>
+													<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+														th:replace="fragments :: column_link('/customers', 'city', 'Thành phố', 'none')">
+													</th>
+													<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+														th:replace="fragments :: column_link('/customers', 'enabled', 'Enabled', 'none')">
+													</th>
+													<th
+														class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center">
+														Hành động
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="customer : ${listCustomers}">
+													<td class="text-center">[[${customer.id}]]</td>
+													<td class="text-center">[[${customer.lastName}]]</td>
+													<td class="text-center">[[${customer.firstName}]]</td>
+													<td class="hideable-column text-center">[[${customer.email}]]</td>
+													<td class="hideable-column text-center">[[${customer.ward}]]</td>
+													<td class="hideable-column text-center">[[${customer.district}]]
+													</td>
+													<td class="text-center">[[${customer.city.name}]]</td>
+													<td class="text-center">
+														<div
+															th:replace="fragments :: status(${customer.enabled}, 'customer', '/customers/' + ${customer.id})">
+														</div>
+													</td>
+													<td class="text-center">
+														<a th:href="@{'/customers/detail/' + ${customer.id}}"
+															class="btn btn-dark btn-xl link-detail">
+															<i class="fas fa-file-alt"></i> Xem
+														</a>
+														&nbsp;
+														<div th:replace="fragments :: edit('customer', '/customers/edit/' + ${customer.id})"
+															class="d-inline-block"></div>
+														&nbsp;
+														<div th:replace="fragments :: delete('customer', ${customer.id}, '/customers/delete/' + ${customer.id}, true)"
+															class="d-inline-block"></div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+								<div th:replace="fragments :: pagination('/customers', 'customers')"></div>
+								<div th:replace="modal_fragments :: confirm_modal"></div>
+								<div class="modal fade" id="detailModal">
+									<div class="modal-dialog modal-lg">
+										<div class="modal-content"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div th:replace="fragments :: footer"></div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<script th:src="@{/js/common_list.js}"></script>
+	<script type="text/javascript">
+		moduleURL = "[[@{/customers}]]";
+
+		$(document).ready(function () {
+			$(".link-delete").on("click", function (e) {
+				e.preventDefault();
+				showDeleteConfirmModal($(this), 'customer');
+			});
+
+			$(".link-detail").on("click", function (e) {
+				e.preventDefault();
+				linkDetailURL = $(this).attr("href");
+				$("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+			});
+		});
+	</script>
+</body>
+
+</html>

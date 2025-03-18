@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head(${pageTitle}, 'none')" />
+
+<body>
+
+
+    <div class="row">
+        <div class="col-2"  style="background: #4e73df; background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);">
+            <div class="container-fluid">
+                <div th:replace="navigation :: menu"></div>
+
+            </div>
+        </div>
+        <div class="col-10 p-3">
+            <div class="row">
+                <!-- Navbar header -->
+                <div class="col-12">
+                    <div class="container-fluid">
+                        <div th:replace="nav_header :: nav_header('Quản lí khách hàng > ', ${pageTitle})"></div>
+                    </div>
+
+                </div>
+
+                <div class="col-12">
+                    <div class="container-fluid">
+                        <div style="min-height: calc(100vh - 200px);">
+                            <!-- Table -->
+                            <div class="card my-4 p-3">
+                                <form th:action="@{/customers/save}" th:object="${customer}" method="post"
+                                    style="min-width: 600px; margin:  0 auto;"
+                                    onsubmit="return checkEmailUnique(this);">
+                                    <input type="hidden" th:field="*{id}" />
+                                    <div class="border border-secondary rounded p-3">
+
+                                        <div class="form-group px-3">
+                                            <label for="lastName">Họ:</label>
+                                            <div>
+                                                <input type="text" class="form-control" th:field="*{lastName}" required
+                                                    minlength="2" maxlength="45">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group px-3">
+                                            <label for="firstName">Tên:</label>
+                                            <div>
+                                                <input type="text" class="form-control" th:field="*{firstName}" required
+                                                    minlength="2" maxlength="45">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group px-3">
+                                            <label for="email">E-mail:</label>
+                                            <div>
+                                                <input type="email" class="form-control" th:field="*{email}" required
+                                                    minlength="10" maxlength="45">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group px-3">
+                                            <label for="password">Mật khẩu:</label>
+                                            <div>
+                                                <input type="password" class="form-control" th:field="*{password}"
+                                                    minlength="6" maxlength="45"
+                                                    placeholder="Để trống nếu không muốn đổi mật khẩu">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group px-3">
+                                            <label for="phoneNumber">Số điện
+                                                thoại:</label>
+                                            <div>
+                                                <input type="text" class="form-control" th:field="*{phoneNumber}"
+                                                    required minlength="9" maxlength="12">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group px-3">
+                                            <label for="addressLine1">Số nhà, tên
+                                                đường:</label>
+                                            <div>
+                                                <input type="text" class="form-control" th:field="*{addressLine}"
+                                                    required minlength="9" maxlength="64">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group px-3">
+                                            <label for="country">Thành phố:</label>
+                                            <div>
+                                                <select th:field="*{city}" class="form-control">
+                                                    <option th:each="city : ${listCities}" th:value="${city.id}">
+                                                        [[${city.name}]]</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group px-3">
+                                            <label for="state">Quận:</label>
+                                            <div>
+                                                <input type="text" class="form-control" th:field="*{district}"
+                                                    minlength="3" maxlength="64" list="listDistrics">
+                                                <datalist id="listDistrics">
+                                                </datalist>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group px-3">
+                                            <label for="addressLine1">Phường :</label>
+                                            <div>
+                                                <input type="text" class="form-control" th:field="*{ward}" required
+                                                    minlength="9" maxlength="64">
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="text-center">
+                                            <input type="submit" value="Lưu" class="btn btn-primary m-3" />
+                                            <input type="button" value="Hủy" class="btn btn-secondary"
+                                                id="buttonCancel" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div th:replace="modal_fragments :: modal_dialog"></div>
+                        <div th:replace="fragments :: footer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script type="text/javascript">
+        var dropdownCities;
+        var dropdownDistricts;
+
+        $(document).ready(function () {
+            dropdownCities = $("#city");
+            dropdownDistricts = $("#listDistrics");
+
+            dropdownCities.on("change", function () {
+                loadDistrictFromCity();
+                $("#district").val("").focus();
+            });
+
+            loadDistrictFromCity();
+
+            $('#buttonCancel').click(function () {
+                window.location = "[[@{/customers}]]";
+            });
+        });
+
+        function loadDistrictFromCity() {
+            var selectedCity = $("#city option:selected");
+            var cityId = selectedCity.val();
+
+            var url = "[[@{/districts/list_by_city/}]]" + cityId;
+
+            $.get(url, function (responseJson) {
+                dropdownDistricts.empty();
+
+                $.each(responseJson, function (index, district) {
+                    $("<option>").val(district.name).text(district.name).appendTo(dropdownDistricts);
+                });
+            }).fail(function () {
+                showErrorModal("Lỗi: Không thể hiển thị quận.");
+            });
+        }
+
+
+        function checkEmailUnique(form) {
+            customerId = $("#id").val();
+            customerEmail = $("#email").val();
+            csrfValue = $("input[name='_csrf'").val();
+
+            url = "[[@{/customers/check_email}]]";
+            params = { id: customerId, email: customerEmail, _csrf: csrfValue };
+
+            $.post(url, params, function (response) {
+                if (response == "OK") {
+                    form.submit();
+                } else if (response == "Duplicated") {
+                    showWarningModal("Đã có khách hàng sở hữu email: " + customerEmail);
+                } else {
+                    showErrorModal("Unknown response from server");
+                }
+            }).fail(function () {
+                showErrorModal("Could not connect to the server");
+            });
+
+            return false;
+        }
+
+    </script>
+    <script th:src="@{/js/common_form.js}"></script>
+    <script th:src="@{/js/common_form_city_district.js}"></script>
+</body>
+
+</html>

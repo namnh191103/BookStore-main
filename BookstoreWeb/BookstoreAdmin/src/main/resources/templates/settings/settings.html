@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+
+    <head th:replace="fragments :: page_head('Setting', 'tag')" />
+    <link rel="stylesheet" th:href="@{/richtext/richtext.min.css}" />
+    <script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+</head>
+
+
+<body>
+    <div class="container-fluid p-3">
+        <div class="row">
+            <div class="col-md-2"  style="background: #4e73df; background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);">
+                <div class="" style="min-height: 100vh;">
+                    <div th:replace="navigation :: menu"></div>
+                </div>
+            </div>
+
+            <div class="col-md-10">
+                <div class="container-fluid">
+                    <div class="card px-4 py-2">
+                        <div th:if="${message != null}" class="alert alert-success text-center">
+                            [[${message}]]
+                        </div>
+
+                        <ul class="nav nav-tabs" id="settingTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general"
+                                    role="tab">Tổng quan</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="cities-tab" data-toggle="tab" href="#cities" role="tab">Các
+                                    thành phố</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="districts-tab" data-toggle="tab" href="#districts"
+                                    role="tab">Quận</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="mailServer-tab" data-toggle="tab" href="#mailServer"
+                                    role="tab">Máy chủ thư</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="mailTemplates-tab" data-toggle="tab" href="#mailTemplates"
+                                    role="tab">Mẫu thư</a>
+                            </li>
+                      
+                        </ul>
+
+                        <div class="tab-content mt-3">
+                            <div class="tab-pane fade show active" id="general" role="tabpanel">
+                                <div th:replace="settings/general :: content"></div>
+                            </div>
+                            <div class="tab-pane fade" id="cities" role="tabpanel">
+                                <div th:replace="settings/cities :: content"></div>
+                            </div>
+                            <div class="tab-pane fade" id="districts" role="tabpanel">
+                                <div th:replace="settings/districts :: content"></div>
+                            </div>
+                            <div class="tab-pane fade" id="mailServer" role="tabpanel">
+                                <div th:replace="settings/mail_server :: content"></div>
+                            </div>
+                            <div class="tab-pane fade" id="mailTemplates" role="tabpanel">
+                                <div th:replace="settings/mail_templates/mail_templates :: content"></div>
+                            </div>
+                            <div class="tab-pane fade" id="payment" role="tabpanel">
+                                <h2>Payment</h2>
+                            </div>
+                        </div>
+
+                        <div class="toast" role="alert" aria-live="polite" aria-atomic="true" data-delay="3000">
+                            <div class="toast-body">
+                                <span id="toastMessage"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div th:replace="fragments :: footer"></div>
+
+    </div>
+    <script type="text/javascript">
+        MAX_FILE_SIZE = 1024000;  //1000KB
+
+        contextPath = "[[@{/}]]";
+
+        var csrfHeaderName = "[[${_csrf.headerName}]]";
+        var csrfValue = "[[${_csrf.token}]]";
+
+        $(document).ready(function () {
+            $("#customerVerificationContent").richText();
+            $("#orderConfirmationContent").richText();
+        });
+
+    </script>
+    <script th:src="@{/js/common_form.js}"></script>
+    <script th:src="@{/js/cities_setting.js}"></script>
+    <script th:src="@{/js/districts_setting.js}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Đặt hàng', 'none')" />
+
+<body>
+	<div th:replace="navigation :: header_menu"></div>
+	<div class="container-fluid p-3">
+		<div class="text-center">
+			<h2>Đặt hàng</h2>
+		</div>
+
+		<div class="row m-1 justify-content-evenly">
+			<div class="col-sm-7">
+				<div class="rounded"
+					style="box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;">
+					<div class=" bg-dark text-white p-2">
+						<h5 class="text-white">Thông tin giao hàng</h5>
+					</div>
+
+					<div class="p-3">
+						<p>
+							<b>Giao đến:</b>&nbsp; [[${shippingAddress}]] <a
+								th:href="@{/address_book(redirect=checkout)}">[Giao đến địa
+								chỉ khác]</a>
+						</p>
+						<p>
+							<b>Số ngày giao hàng: </b>[[${checkoutInfo.deliverDays}]] ngày
+						</p>
+						<p>
+							<b>Ngày giao hàng dự kiến: </b>[[${#dates.format(checkoutInfo.deliverDate,
+							'E, dd MMM yyyy')}]]
+						</p>
+					</div>
+				</div>
+
+				<div class="mt-4 mb-3 rounded"
+					style="box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;">
+					<div class="bg-dark text-white p-2">
+						<h5 class="text-white">Phương thức thanh toán</h5>
+					</div>
+
+					<div class="p-3">
+						<div th:if="${checkoutInfo.codSupported}">
+							<form th:action="@{/place_order}" method="post">
+								<p>
+									<input type="radio" name="paymentMethod" id="radioCOD"
+										value="COD" /> Thanh toán khi nhận hàng (COD) &nbsp;
+									<button class="btn btn-primary d-none" type="submit"
+										id="buttonSubmitCOD">Đặt hàng với COD</button>
+								</p>
+							</form>
+							
+						</div>
+
+						<form th:action="@{/place_order}" method="post">
+							<input type="hidden" name="amount" th:value="${checkoutInfo.paymentTotal}" />
+							<p>
+								<input type="radio" name="paymentMethod" id="radioVNPAY"
+									value="VNPAY" /> Thanh toán Online (VNPAY) &nbsp;
+								<button class="btn btn-primary d-none" type="submit"
+									id="buttonSubmitVNPAY">Đặt hàng với VNPAY</button>
+							</p>
+						</form>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="col-sm-4">
+				<div class="rounded"
+					style="box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;">
+					<div class=" bg-dark text-white">
+						<h5 class="text-white p-2">Đơn hàng</h5>
+					</div>
+
+					<div class="p-3">
+						<div>
+							<table>
+								<th:block th:each="item : ${cartItems}">
+									<tr th:with="product = ${item.product}">
+										<td>[[${item.quantity}]] X &nbsp;&nbsp;</td>
+										<td width="70%"><a th:href="@{'/p/' + ${product.alias}}"
+											target="_blank"> [[${product.shortName}]] </a> <br /></td>
+										<td>
+											<div
+												th:replace="fragments :: format_currency(${item.subtotal})">
+										</td>
+									</tr>
+								</th:block>
+								<tr>
+									<td colspan="3">
+										<hr />
+								</tr>
+							</table>
+						</div>
+
+						<div class="row mt-2">
+							<div class="col">Tổng sản phẩm:</div>
+							<div class="col">
+								<div
+									th:replace="fragments :: format_currency(${checkoutInfo.productTotal})"></div>
+							</div>
+						</div>
+
+						<div class="row mt-2">
+							<div class="col">Tổng phí vận chuyển:</div>
+							<div class="col">
+								<div
+									th:replace="fragments :: format_currency(${checkoutInfo.shippingCostTotal})"></div>
+							</div>
+						</div>
+
+						<div class="row mt-2">
+							<div class="col">Tổng thanh toán:</div>
+							<div class="col">
+								<b>
+									<div
+										th:replace="fragments :: format_currency(${checkoutInfo.paymentTotal})"></div>
+								</b>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+	<div th:replace="navigation :: footer_menu"></div>
+	<script type="text/javascript">
+	contextPath = "[[@{/}]]";
+	var csrfHeaderName = "[[${_csrf.headerName}]]";
+	var csrfValue = "[[${_csrf.token}]]";
+
+	$(document).ready(function () {
+		$("#radioCOD").on("click", function () {
+			$("#buttonSubmitCOD").removeClass("d-none").prop("disabled", false);
+			$("#buttonSubmitVNPAY").addClass("d-none").prop("disabled", true);
+			$("#radioVNPAY").prop("checked", false);
+			$("#radioCOD").prop("checked", true);   
+		});
+
+		$("#radioVNPAY").on("click", function () {
+			$("#buttonSubmitVNPAY").removeClass("d-none").prop("disabled", false);
+			$("#buttonSubmitCOD").addClass("d-none").prop("disabled", true);
+			$("#radioCOD").prop("checked", false);  
+			$("#radioVNPAY").prop("checked", true); 
+		});
+	});
+</script>
+</body>
+
+</html>

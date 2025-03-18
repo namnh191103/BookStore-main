@@ -1,0 +1,21 @@
+debug: false
+
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+         google:
+          clientId: YOUR_GOOGLE_APP_CLIENT_ID
+          clientSecret: YOUR_GOOGLE_APP_SECRET_KEY
+          scope:
+           - email
+           - profile
+                   
+         facebook:
+          clientId: YOUR_FACEBOOK_APP_CLIENT_ID
+          clientSecret: YOUR_FACEBOOK_APP_SECRET_KEY
+          scope:
+           - email
+           - public_profile

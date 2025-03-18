@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Yêu Thích', 'none')"/>
+
+<body>
+<div th:replace="navigation :: header_menu"></div>
+
+<div class="container-fluid" style="min-height: calc(100vh - 245px);">
+    <div class="container my-3">
+        <div class="text-center mb-4">
+            <h2>Yêu Thích</h2>
+        </div>
+
+        <div class="row">
+            <div >
+                <th:block th:each="product, status : ${favorites}">
+                    <div th:id="'row' + ${status.count}"
+                         class="row border rounded p-3 mb-3 shadow-sm justify-content-between"
+                         th:with="product = ${product}">
+                        <div class="col-1 d-flex flex-column align-items-center justify-content-center">
+                            <div>
+                                <a th:rowNumber="${status.count}"
+                                   class="fa fa-heart" style="font-size:48px;color:red"
+                                   th:href="@{'/favorite/remove/' + ${product.id}}"></a>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <img th:src="@{${product.mainImagePath}}" class="img-fluid rounded fixed-size-img"
+                                 style="max-height: 210px;">
+                        </div>
+                        <div style="width: 64%;">
+                            <div>
+                                <a th:title="${product.name}" th:href="@{'/p/' + ${product.alias}}" target="_blank"
+                                   class="text-dark"><b>[[${product.shortName}]]</b></a>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title">Thông tin chi tiết:</h3>
+                                <hr>
+                                <th:block th:each="detail : ${product.details}">
+                                    <div class="card-text">
+                                        <b>[[${detail.name}]]</b>:
+                                        <span>[[${detail.value}]]</span>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+
+        <div id="sectionEmptyCartMessage"
+             th:class=" 'text-center ' + (${#lists.isEmpty(favorites)} ? '' : 'd-none')">
+            <h4>Không có sản phẩm trong yêu thích</h4>
+        </div>
+    </div>
+
+
+    <div th:replace="fragments :: modal_dialog"></div>
+    <div>
+
+    </div>
+</div>
+<div th:replace="navigation :: footer_menu"></div>
+
+<script>
+    contextPath = "[[@{/}]]";
+    var csrfHeaderName = "[[${_csrf.headerName}]]";
+    var csrfValue = "[[${_csrf.token}]]";
+</script>
+<script th:src="@{js/common_modal.js}"></script>
+<script th:src="@{js/shopping_cart.js}"></script>
+<script th:src="@{js/jquery.number.min.js}"></script>
+</body>
+
+</html>

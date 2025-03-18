@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Reviews - Shopme Admin', 'none')" />
+
+<body>
+
+	<div class="row">
+		<div class="col-2"  style="background: #4e73df; background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%);">
+			<div class="container-fluid">
+				<div th:replace="navigation :: menu"></div>
+			</div>
+		</div>
+		<div class="col-10 p-3">
+
+			<div class="row">
+				<!-- Navbar header -->
+				<div class="col-12">
+					<div class="container-fluid">
+						<div th:replace="nav_header :: nav_header('Review', '')"></div>
+					</div>
+
+				</div>
+
+				<div class="col-12">
+					<div class="container-fluid">
+						<div style="min-height: calc(100vh - 200px);">
+							<!-- Table -->
+							<div class="card my-4">
+								<div class="d-flex justify-content-between align-items-baseline">
+									<!-- Action list -->
+									<div class="d-flex justify-content-between align-items-center mt-3 mx-3"></div>
+
+									<!-- Search -->
+									<div class="search-action mx-3">
+										<div th:replace="fragments :: search_form_and_message" />
+									</div>
+								</div>
+
+								<!-- Core table -->
+								<div class="card-body px-0 pb-2">
+									<div class="table-responsive p-0">
+										<table class="table align-items-center mb-0">
+											<thead>
+												<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+													th:replace="fragments :: column_link('/reviews','id', 'ID', 'none')" />
+												<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+													th:replace="fragments :: column_link('/reviews','product', 'Product', 'none')" />
+												<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+													th:replace="fragments :: column_link('/reviews','customer', 'Customer', 'none')" />
+												<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+													th:replace="fragments :: column_link('/reviews','rating', 'Rating', 'none')" />
+												<th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center"
+													th:replace="fragments :: column_link('/reviews','reviewTime', 'Review Time', 'none')" />
+												<th
+													class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 text-center">
+													Hành động
+												</th>
+											</thead>
+											<tbody>
+												<tr th:each="review : ${listReviews}">
+													<td class="text-center">[[${review.id}]]</td>
+													<td class="text-center">
+														<a th:href="@{'/products/detail/' + ${review.product.id}}"
+															class="link-detail-product">
+															[[${review.product.shortName}]]
+														</a>
+													</td>
+													<td class="text-center">
+														<a th:href="@{'/customers/detail/' + ${review.customer.id}}"
+															class="link-detail-customer">
+															[[${review.customer.fullName}]]
+														</a>
+													</td>
+													<td class="text-center">[[${review.rating}]] <i
+															class="far fa-star"></i></td>
+													<td class="text-center">[[${review.reviewTime}]]</td>
+													<td class="text-center d-flex align-items-center">
+														<a class="fas fa-file-alt fa-2x icon-green link-detail-review"
+															th:href="@{'/reviews/detail/' + ${review.id}}"
+															title="View details of this review"></a>
+														&nbsp;
+														<div
+															th:replace="fragments :: edit('review', '/reviews/edit/' + ${review.id})" />
+														&nbsp;
+														<div
+															th:replace="fragments :: delete('review', ${review.id}, '/reviews/delete/' + ${review.id}, true)" />
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+
+	<!-- <div th:replace="fragments :: pagination('reviews')"></div> -->
+
+	<div th:replace="modal_fragments :: confirm_modal" />
+
+	<div class="modal fade" id="xlargeModal">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="largeModal">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="fragments :: footer"></div>
+
+	<script th:src="@{/js/common_list.js}"></script>
+	<script type="text/javascript">
+		moduleURL = "[[@{/reviews}]]";
+
+		$(document).ready(function () {
+			handleDeleteLink();
+			handleProductDetailLink();
+			handleCustomerDetailLink();
+			handleReviewDetailLink();
+		});
+
+		function handleDeleteLink() {
+			$(".link-delete").on("click", function (e) {
+				e.preventDefault();
+				showDeleteConfirmModal($(this), 'review');
+			});
+		}
+
+		function handleDetailLinkClick(cssClass, modalId) {
+			$(cssClass).on("click", function (e) {
+				e.preventDefault();
+				linkDetailURL = $(this).attr("href");
+				$(modalId).modal("show").find(".modal-content").load(linkDetailURL);
+			});
+		}
+
+		function handleProductDetailLink() {
+			handleDetailLinkClick(".link-detail-product", "#xlargeModal");
+		}
+
+		function handleCustomerDetailLink() {
+			handleDetailLinkClick(".link-detail-customer", "#largeModal");
+		}
+
+		function handleReviewDetailLink() {
+			handleDetailLinkClick(".link-detail-review", "#largeModal");
+		}	
+	</script>
+</body>
+
+</html>

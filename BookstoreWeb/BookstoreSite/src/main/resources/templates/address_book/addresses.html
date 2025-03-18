@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Book.store', 'none')" />
+
+<body>
+    <div th:replace="navigation :: header_menu"></div>
+
+    <div class="container-fluid" style="min-height: calc(100vh - 255px);">
+
+        <div class="container mt-4">
+            <div class="mb-4">
+                <h2
+                    th:text="${param.redirect != null && param.redirect[0] == 'checkout'} ? 'Chọn địa chỉ giao hàng' : 'Địa chỉ giao hàng'">
+                </h2>
+            </div>
+
+            <div class="mb-3">
+                <a th:unless="${param.redirect}" th:href="@{/address_book/new}" class="btn btn-secondary">Thêm địa chỉ
+                    mới</a>
+                <a th:if="${param.redirect != null && param.redirect[0] == 'checkout'}"
+                    th:href="@{/address_book/new(redirect=checkout)}" class="btn btn-secondary">Thêm địa chỉ mới</a>
+            </div>
+
+            <div th:if="${message != null}" class="alert alert-success text-center">
+                [[${message}]]
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card"
+                        th:classappend="${usePrimaryAddressAsDefault ? 'bg-dark text-white' : 'bg-light text-dark'}">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-0">Địa chỉ chính</h5>
+                                <th:block th:if="${usePrimaryAddressAsDefault}">
+                                    <span class="text-danger"
+                                        th:text="${param.redirect != null && param.redirect[0] == 'checkout' ? 'Đang chọn' : 'Mặc định'}"></span>
+                                </th:block>
+                                <th:block th:unless="${usePrimaryAddressAsDefault}">
+                                    <a th:unless="${param.redirect}" th:href="@{'/address_book/default/0'}"
+                                        class="btn btn-outline-secondary btn-sm">Đặt làm mặc định</a>
+                                    <a th:if="${param.redirect != null && param.redirect[0] == 'cart'}"
+                                        th:href="@{'/address_book/default/0?redirect=cart'}"
+                                        class="btn btn-outline-secondary btn-sm">Đặt làm mặc định</a>
+                                    <a th:if="${param.redirect != null && param.redirect[0] == 'checkout'}"
+                                        th:href="@{'/address_book/default/0?redirect=checkout'}"
+                                        class="btn btn-outline-secondary btn-sm">Chọn</a>
+                                </th:block>
+                            </div>
+                            <div>
+                                <a th:unless="${param.redirect}" class="fas fa-edit icon-dark"
+                                    title="Chỉnh sửa địa chỉ chính của bạn"
+                                    th:href="@{/account_details(redirect=address_book)}"></a>
+                                <a th:if="${param.redirect != null && param.redirect[0] == 'checkout'}"
+                                    class="fas fa-edit icon-dark" title="Chỉnh sửa địa chỉ chính của bạn"
+                                    th:href="@{/account_details(redirect=checkout)}"></a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            [[${customer}]]
+                        </div>
+                    </div>
+                </div>
+
+                <th:block th:each="address, status: ${listAddresses}">
+                    <div class="col-md-6 mb-3">
+                        <div class="card"
+                            th:classappend="${address.defaultForShipping ? 'bg-dark text-white' : 'bg-light text-dark'}">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-0">Địa chỉ #[[${status.count + 1}]]</h5>
+                                    <th:block th:if="${address.defaultForShipping}">
+                                        <span class="text-danger"
+                                            th:text="${param.redirect != null && param.redirect[0] == 'checkout' ? 'Đang chọn' : 'Mặc định'}"></span>
+                                    </th:block>
+                                    <th:block th:unless="${address.defaultForShipping}">
+                                        <a th:unless="${param.redirect}"
+                                            th:href="@{'/address_book/default/' + ${address.id}}"
+                                            class="btn btn-outline-secondary btn-sm">Đặt làm mặc định</a>
+                                        <a th:if="${param.redirect != null && param.redirect[0] == 'cart'}"
+                                            th:href="@{'/address_book/default/' + ${address.id} + '?redirect=cart'}"
+                                            class="btn btn-outline-secondary btn-sm">Đặt làm mặc định</a>
+                                        <a th:if="${param.redirect != null && param.redirect[0] == 'checkout'}"
+                                            th:href="@{'/address_book/default/' + ${address.id} + '?redirect=checkout'}"
+                                            class="btn btn-outline-secondary btn-sm">Chọn</a>
+                                    </th:block>
+                                </div>
+                                <div>
+                                    <a th:unless="${param.redirect}" class="fas fa-edit icon-dark"
+                                        title="Chỉnh sửa địa chỉ này"
+                                        th:href="@{'/address_book/edit/' + ${address.id}}"></a>
+                                    <a th:if="${param.redirect != null && param.redirect[0] == 'checkout'}"
+                                        class="fas fa-edit icon-dark" title="Chỉnh sửa địa chỉ này"
+                                        th:href="@{'/address_book/edit/' + ${address.id} + '?redirect=checkout'}"></a>
+                                    &nbsp;
+                                    <a class="fas fa-trash icon-dark linkDelete" title="Xóa địa chỉ này"
+                                        th:entityId="${address.id}"
+                                        th:href="@{'/address_book/delete/' + ${address.id}}"></a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                [[${address}]]
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+
+        <div class="mb-4"></div>
+    </div>
+
+    <div th:replace="navigation :: footer_menu"></div>
+</body>
+
+</html>

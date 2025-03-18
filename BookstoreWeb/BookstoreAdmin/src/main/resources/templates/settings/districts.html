@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="content" th:remove="tag">
+        <div class="container mt-4">
+            <!-- Giới thiệu -->
+            <div class="mb-4">
+                <p>
+                    Sử dụng trang này để quản lý các quận sẽ được khách truy cập chọn trong mẫu đăng ký của khách hàng.
+                    Nhấp vào nút dưới đây để tải danh sách thành phố.
+                </p>
+            </div>
+    
+            <!-- Nút tải danh sách thành phố -->
+            <div class="mb-4">
+                <button type="button" id="buttonLoadCitiesForDistricts" class="btn btn-primary">Load City List</button>
+            </div>
+    
+            <!-- Thành phố đã chọn -->
+            <div class="form-group row mb-4">
+                <label for="dropDownCitiesForDistricts" class="col-sm-2 col-form-label">Thành Phố Đã Chọn</label>
+                <div class="col-sm-10">
+                    <select class="form-control" id="dropDownCitiesForDistricts"></select>
+                </div>
+            </div>
+    
+            <!-- Tất cả các quận -->
+            <div class="form-group row mb-4">
+                <label for="dropDownDistricts" class="col-sm-2 col-form-label">Tất Cả Quận</label>
+                <div class="col-sm-10">
+                    <select class="form-control" style="height: 300px;" size="10" id="dropDownDistricts"></select>
+                </div>
+            </div>
+    
+            <!-- Biểu mẫu thêm/cập nhật/xóa quận -->
+            <form id="formDistrict">
+                <div class="form-group row mb-4">
+                    <label for="fieldDistrictName" class="col-sm-2 col-form-label">Tên Quận</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="fieldDistrictName" required minlength="3" maxlength="40">
+                    </div>
+                    <div class="col-sm-4 d-flex align-items-center mt-4">
+                        <button type="button" id="buttonAddDistrict" class="btn btn-success mr-2">Tạo Mới</button>
+                        <button type="button" id="buttonUpdateDistrict" class="btn btn-warning mr-2" disabled>Cập Nhật</button>
+                        <button type="button" id="buttonDeleteDistrict" class="btn btn-danger" disabled>Xóa</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+
+</body>
+
+</html>

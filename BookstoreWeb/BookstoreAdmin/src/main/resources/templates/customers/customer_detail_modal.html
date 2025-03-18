@@ -1,0 +1,91 @@
+<div class="modal-header">
+	<h4 class="modal-title">Thông tin khách hàng</h4>
+	<button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
+		
+<div>
+
+	<ul class="nav nav-tabs" id="myTab" role="tablist">
+	  <li class="nav-item">
+	    <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">Chung</a>
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" id="address-tab" data-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="false">Địa chỉ</a>
+	  </li>
+	 </ul>
+	 
+	<div class="tab-content" id="myTabContent">
+	  <div class="tab-pane fade show active p-3" id="general" role="tabpanel" aria-labelledby="general-tab">
+		  <div class="form-group row">
+		    <label for="id" class="col-sm-4 col-form-label">Khách hàng ID:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.id}" />
+		    </div>
+		  </div>
+		  
+		  <div class="form-group row">
+		    <label for="name" class="col-sm-4 col-form-label">Họ và Tên:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.fullName}" />
+		    </div>
+		  </div>
+		  
+		  <div class="form-group row">
+		    <label for="email" class="col-sm-4 col-form-label">E-mail:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.email}" />
+		    </div>
+		  </div>  
+		  
+		  <div class="form-group row">
+		    <label for="phone" class="col-sm-4 col-form-label">Số điện thoại:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.phoneNumber}" />
+		    </div>
+		  </div> 
+		  
+		  <div class="form-group row">
+		    <label for="enabled" class="col-sm-4 col-form-label">Kích hoạt:</label>
+		    <div class="col-sm-8">
+		      <input type="checkbox" th:checked="${customer.enabled}" disabled="disabled" />
+		    </div>
+		  </div>
+		  
+		  <div class="form-group row">
+		    <label for="createdTime" class="col-sm-4 col-form-label">Thời gian tạo:</label>
+		    <div class="col-sm-8">
+		      <span th:text="${#dates.format(customer.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+		    </div>
+		  </div>		   		  
+	  </div>
+	  
+	  <div class="tab-pane fade show p-3" id="address" role="tabpanel" aria-labelledby="address-tab">
+		  <div class="form-group row">
+		    <label for="address1" class="col-sm-4 col-form-label">Số nhà, tên đường:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.addressLine}" />
+		    </div>
+		  </div>
+		  
+		  
+		  <div class="form-group row">
+		    <label for="state" class="col-sm-4 col-form-label">Quận:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.district}" />
+		    </div>
+		  </div>
+		  
+		  <div class="form-group row">
+		    <label for="country" class="col-sm-4 col-form-label">Thành phố:</label>
+		    <div class="col-sm-8">
+		      <input type="text" readonly class="form-control" th:value="${customer.city.name}" />
+		    </div>
+		  </div>        
+			  
+	  </div>	  
+	</div>    
+</div>
+	
+<div class="modal-footer">
+	<button type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
+</div>	

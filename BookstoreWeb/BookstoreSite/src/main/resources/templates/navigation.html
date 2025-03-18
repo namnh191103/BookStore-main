@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="header_menu">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-white shadow-sm px-5">
+            <a class="navbar-brand" th:href="@{/}">
+                <img th:src="@{${SITE_LOGO}}" width="200" alt="Logo" />
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Search form in the center -->
+                <form class="form-inline mx-auto my-2 my-lg-0" th:action="@{/search}" method="get" style="width: 50%;">
+                    <div class="input-group" style="width: 100%;">
+                        <input type="search" name="keyword" class="form-control z-index-0 bg-white"
+                            th:value="${keyword}" placeholder="Tìm kiếm sản phẩm..." required style="height: auto;" />
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-dark">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <!-- Account options on the right -->
+                <ul class="navbar-nav ml-auto">
+                    <th:block sec:authorize="isAuthenticated()">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="accountDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                sec:authentication="principal.fullName">
+                                <i class="fas fa-user"></i> Tài khoản
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdown">
+                                <a class="dropdown-item text-dark" th:href="@{/account_details}">
+                                    <i class="fas fa-user mr-1"></i> Thông tin tài khoản
+                                </a>
+                                <a class="dropdown-item text-dark" th:href="@{/address_book}">
+                                    <i class="fas fa-map-marker-alt mr-1"></i> Địa chỉ giao hàng
+                                </a>
+                                <a class="dropdown-item text-dark" th:href="@{/favorite}">
+                                    <i class="fa fa-heart"></i> Yêu thích
+                                </a>
+                                <a class="dropdown-item text-dark" th:href="@{/reviews}">
+                                    <i class="fas fa-comments mr-1"></i> Reviews
+                                </a>
+                                <a class="dropdown-item text-dark" th:href="@{/orders}">
+                                    <i class="fas fa-box mr-1"></i> Đơn hàng
+                                </a>
+                                <a class="dropdown-item text-dark" th:href="@{/cart}">
+                                    <i class="fas fa-shopping-cart mr-1"></i> Giỏ hàng
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-dark" href="javascript: document.logoutForm.submit()">
+                                    <i class="fas fa-sign-out-alt mr-1"></i> Đăng xuất
+                                </a>
+                            </div>
+                        </li>
+                        <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+                            <input type="submit" value="Logout" />
+                        </form>
+                    </th:block>
+                    <th:block sec:authorize="!isAuthenticated()">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" th:href="@{/login}">
+                                <i class="fas fa-sign-in-alt"></i>
+                                <span>
+                                    Đăng nhập
+                                </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" th:href="@{/register}">
+                                <i class="fas fa-user-plus"></i>
+                                <span>
+                                    Đăng kí
+                                </span>
+                            </a>
+                        </li>
+                    </th:block>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+
+    <div th:fragment="footer_menu">
+    
+        <!-- Footer-->
+        <footer th:fragment="footer" class="mt-4">
+            <!-- footer section start -->
+            <footer id="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a href="#"><img th:src="@{${SITE_LOGO}}" width="170" alt="Logo" /></a>
+                            <div class="footer-about">
+                                <a>HỆ THỐNG CỬA HÀNG BOOKSTORE</a>
+                                <p>Book.Store STUDIO: 69 TON DUC THANG STREET, LIEN CHIEU DISTRICT, DANANG CITY.</p>
+                                  <p>Store 2: 26 LY TU TRONG STREET, DISTRICT 1, HOCHIMINH (THE NEW PLAYGROUND).</p>
+                                    <p>Store 3: 140 NGUYEN HY QUANG, DONG DA DISTRICT, HANOI</p>
+                                
+                                
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="useful-link">
+                                <h2>Useful Links</h2>
+                                <img src="./assets/images/about/home_line.png" alt="" class="img-fluid">
+                                <div class="use-links">
+                                    <li><a href="#"><i class="fa-solid fa-angles-right"></i>Trang Chủ</a></li>
+                                    <li><a href="#"><i class="fa-solid fa-angles-right"></i>Giỏ Hàng</a></li>
+                                    <li><a href="#"><i class="fa-solid fa-angles-right"></i> Đơn Hàng</a></li>
+                                    <li><a href="#"><i class="fa-solid fa-angles-right"></i> Đia Chỉ Giao Hàng</a></li>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="social-links">
+                                <h2>Follow Us</h2>
+                                <img src="./assets/images/about/home_line.png" alt="">
+                                <div class="social-icons">
+                                    <li><a href="https://www.facebook.com/binzet.18"><i class="fa-brands fa-facebook-f"></i> Facebook</a></li>
+                                    <li><a href="https://www.instagram.com/binzet.dn/"><i class="fa-brands fa-instagram"></i> Instagram</a></li>
+                                    <li><a href=""><i class="fa-brands fa-linkedin-in"></i> Linkedin</a></li>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="address">
+                                <h2>Address</h2>
+                                <img src="./assets/images/about/home_line.png" alt="" class="img-fluid">
+                                <div class="address-links">
+                                    <li class="address1"><i class="fa-solid fa-location-dot"></i> Book.Store STUDIO: 69 TON DUC THANG STREET, LIEN CHIEU DISTRICT, DANANG CITY.</li>
+                                    <li><a href=""><i class="fa-solid fa-phone"></i> +84 376299300</a></li>
+                                    <li><a href=""><i class="fa-solid fa-envelope"></i> linhdanhthue@gmail.com.vn</a></li>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="copy-right-sec">
+                        <p class="m-0 text-center text-dark">[[${COPYRIGHT}]]</p>
+                    </div>
+                </div>
+
+            </footer>
+            <!-- footer section end -->
+            <!-- footer copy right section start -->
+            <!-- <section id="copy-right">
+                <div class="copy-right-sec">
+                    <i class="fa-solid fa-copyright"></i>
+                    <p class="m-0 text-center text-white">[[${COPYRIGHT}]]</p>
+                </div>
+
+            </section> -->
+            <!-- footer copy right section end -->
+        </footer>
+    </div>
+
+</body>
+
+</html>

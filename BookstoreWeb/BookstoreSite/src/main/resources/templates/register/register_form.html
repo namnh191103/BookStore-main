@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments :: page_head('Book.store', 'none')" />
+
+<body>
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .error-message {
+        color: red;
+        font-size: 16px;;
+        display: none;
+    }
+</style>
+
+<div th:replace="navigation :: header_menu"></div>
+
+<div class="container-fluid p-3">
+    <div class="text-center mb-4">
+        <h2>Đăng kí tài khoản</h2>
+    </div>
+
+    <form th:action="@{/create_customer}" method="post" th:object="${customer}" class="form-container"
+          onsubmit="return checkEmailUnique(this);">
+
+        <div class="border border-secondary rounded p-4 shadow-sm">
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Họ:</label>
+                <div class="col-sm-8">
+                    <input type="text" id="lastName" th:field="*{lastName}" class="form-control">
+                </div>
+                <div class="error-message" id="lastNameError"></div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Tên:</label>
+                <div class="col-sm-8">
+                    <input type="text" th:field="*{firstName}" class="form-control" >
+                </div>
+                <div class="error-message" id="firstNameError"></div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">E-mail:</label>
+                <div class="col-sm-8">
+                    <input type="email" th:field="*{email}" class="form-control" >
+                </div>
+                <div class="error-message" id="emailError"></div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Mật khẩu:</label>
+                <div class="col-sm-8">
+                    <input type="password" th:field="*{password}" class="form-control"  oninput="checkPasswordMatch(document.getElementById('confirmPassword'))">
+                </div>
+                <div class="error-message" id="passwordError"></div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Nhập lại mật khẩu:</label>
+                <div class="col-sm-8">
+                    <input type="password" id="confirmPassword" class="form-control"  oninput="checkPasswordMatch(this)">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Số điện thoại:</label>
+                <div class="col-sm-8">
+                    <input type="text" th:field="*{phoneNumber}" class="form-control" >
+                </div>
+                <div class="error-message" id="phoneNumberError"></div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Thành phố:</label>
+                <div class="col-sm-8">
+                    <select class="form-control" th:field="*{city}">
+                        <th:block th:each="city : ${listCites}">
+                            <option th:value="${city.id}">[[${city.name}]]</option>
+                        </th:block>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Quận:</label>
+                <div class="col-sm-8">
+                    <input type="text" th:field="*{district}" class="form-control"  list="listDistricts">
+                    <datalist id="listDistricts"></datalist>
+                </div>
+                <div class="error-message" id="districtError"></div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Phường:</label>
+                <div class="col-sm-8">
+                    <input type="text" th:field="*{ward}" class="form-control" >
+                </div>
+                <div class="error-message" id="wardError"></div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Số nhà, tên đường:</label>
+                <div class="col-sm-8">
+                    <input type="text" th:field="*{addressLine}" class="form-control" >
+                </div>
+                <div class="error-message" id="addressLineError"></div>
+            </div>
+
+            <div class="form-group text-center">
+                <input type="submit" value="Đăng kí" class="btn btn-primary">
+            </div>
+        </div>
+
+    </form>
+
+    <div th:replace="fragments :: modal_dialog"></div>
+    <div th:replace="navigation :: footer_menu"></div>
+</div>
+
+<script>
+    contextPath = "[[@{/}]]"
+    function checkEmailUnique(form) {
+        let check = false;
+        let lastName = document.getElementById('lastName').value;
+        let lastNameError = document.getElementById('lastNameError');
+        if (lastName) {
+            lastNameError.style.display = 'block';
+            if(lastName.length < 2){
+            document.getElementById("lastNameError").innerHTML = "Họ phải nhiều hơn 2 ký tự";
+            check = true;
+            } else if(lastName.length > 50){
+            document.getElementById("lastNameError").innerHTML = "Họ phải ít hơn 50 ký tự";
+            check = true;
+            }else{
+                lastNameError.style.display = 'none';
+            }
+        } else {
+
+            document.getElementById("lastNameError").innerHTML = "Họ không được trống";
+            lastNameError.style.display = 'block';
+            check = true;
+        }
+        let firstName = document.getElementById('firstName').value;
+        let firstNameError = document.getElementById('firstNameError');
+        if (firstName) {
+            firstNameError.style.display = 'block';
+            if(firstName.length < 2){
+            document.getElementById("firstNameError").innerHTML = "Tên phải nhiều hơn 2 ký tự";
+            check = true;
+            } else if(firstName.length > 50){
+            document.getElementById("firstNameError").innerHTML = "Tên phải ít hơn 50 ký tự";
+            check = true;
+            }else{
+                firstNameError.style.display = 'none';
+            }
+        } else {
+
+            document.getElementById("firstNameError").innerHTML = "Tên không được trống";
+            firstNameError.style.display = 'block';
+            check = true;
+        }
+                    let email = document.getElementById('email').value;
+        let emailError = document.getElementById('emailError');
+        if (email) {
+            emailError.style.display = 'block';
+            if(email.length < 2){
+            document.getElementById("emailError").innerHTML = "Email phải nhiều hơn 2 ký tự";
+            check = true;
+            } else if(email.length > 150){
+            document.getElementById("emailError").innerHTML = "Email phải ít hơn 150 ký tự";
+            check = true;
+            }else{
+                emailError.style.display = 'none';
+            }
+        } else {
+
+            document.getElementById("emailError").innerHTML = "Email không được trống";
+            emailError.style.display = 'block';
+            check = true;
+        }
+        let password = document.getElementById('password').value;
+        let passwordError = document.getElementById('passwordError');
+        if (password) {
+            passwordError.style.display = 'block';
+            if(password.length < 2){
+            document.getElementById("passwordError").innerHTML = "Mật khẩu phải nhiều hơn 2 ký tự";
+            check = true;
+            } else if(password.length > 50){
+            document.getElementById("passwordError").innerHTML = "Mật khẩu phải ít hơn 50 ký tự";
+            check = true;
+            }else{
+                passwordError.style.display = 'none';
+            }
+        } else {
+
+            document.getElementById("passwordError").innerHTML = "Mật khẩu không được trống";
+            passwordError.style.display = 'block';
+            check = true;
+        }
+        let phoneNumber = document.getElementById('phoneNumber').value;
+        let phoneNumberError = document.getElementById('phoneNumberError');
+        if (phoneNumber) {
+            phoneNumberError.style.display = 'block';
+            if(phoneNumber.length < 2){
+            document.getElementById("phoneNumberError").innerHTML = "Số điện thoại phải nhiều hơn 2 ký tự";
+            check = true;
+            } else if(phoneNumber.length > 50){
+            document.getElementById("phoneNumberError").innerHTML = "Số điện thoại phải ít hơn 50 ký tự";
+            check = true;
+            }else{
+                phoneNumberError.style.display = 'none';
+            }
+        } else {
+
+            document.getElementById("phoneNumberError").innerHTML = "Số điện thoại không được trống";
+            phoneNumberError.style.display = 'block';
+            check = true;
+        }
+        let district = document.getElementById('district').value;
+        let districtError = document.getElementById('districtError');
+        if (district) {
+            districtError.style.display = 'block';
+            if(district.length < 2){
+            document.getElementById("districtError").innerHTML = "Quận phải nhiều hơn 2 ký tự";
+            check = true;
+            } else if(district.length > 50){
+            document.getElementById("districtError").innerHTML = "Quận phải ít hơn 50 ký tự";
+            check = true;
+            }else{
+                districtError.style.display = 'none';
+            }
+        } else {
+
+            document.getElementById("districtError").innerHTML = "Quận không được trống";
+            districtError.style.display = 'block';
+            check = true;
+        }
+        let ward = document.getElementById('ward').value;
+        let wardError = document.getElementById('wardError');
+        if (ward) {
+            wardError.style.display = 'block';
+            if(ward.length < 2){
+            document.getElementById("wardError").innerHTML = "Phường phải nhiều hơn 2 ký tự";
+            check = true;
+            } else if(ward.length > 50){
+            document.getElementById("wardError").innerHTML = "Phường phải ít hơn 50 ký tự";
+            check = true;
+            }else{
+                wardError.style.display = 'none';
+            }
+        } else {
+
+            document.getElementById("wardError").innerHTML = "Phường không được trống";
+            wardError.style.display = 'block';
+            check = true;
+        }
+        let addressLine = document.getElementById('addressLine').value;
+        let addressLineError = document.getElementById('addressLineError');
+        if (addressLine) {
+            addressLineError.style.display = 'block';
+            if(addressLine.length < 2){
+            document.getElementById("addressLineError").innerHTML = "Số nhà, tên đường phải nhiều hơn 2 ký tự";
+            check = true;
+            } else if(addressLine.length > 50){
+            document.getElementById("addressLineError").innerHTML = "Số nhà, tên đường phải ít hơn 50 ký tự";
+            check = true;
+            }else{
+                addressLineError.style.display = 'none';
+            }
+        } else {
+
+            document.getElementById("addressLineError").innerHTML = "Số nhà, tên đường không được trống";
+            addressLineError.style.display = 'block';
+            check = true;
+        }
+        if(check){
+            return false;
+        }
+        url = contextPath + "customers/check_unique_email";
+        customerEmail = $("#email").val();
+        csrfValue = $("input[name='_csrf']").val();
+
+        params = { email: customerEmail, _csrf: csrfValue };
+
+        $.post(url, params, function (response) {
+            if (response == "OK") {
+                form.submit();
+            } else if (response == "Duplicated") {
+                showWarningModal("Email: " + customerEmail + " đã tồn tại trong hệ thống");
+            } else {
+                showErrorModal("Unknown response from server");
+            }
+        }).fail(function () {
+            showErrorModal("Could not connect to the server");
+        });
+
+        return false;
+    }
+
+</script>
+<script type="text/javascript">
+    contextPath = "[[@{/}]]";
+</script>
+<script th:src="@{/js/common_modal.js}"></script>
+<script type="text/javascript" th:src="@{/js/common_customer_form.js}"></script>
+
+</body>
+
+</html>

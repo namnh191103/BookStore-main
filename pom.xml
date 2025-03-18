@@ -1,0 +1,15 @@
+<project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.bookstore</groupId>
+  <artifactId>BookstoreSummer2024</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>BookstoreSummer2024</name>
+  <description>Root project</description>
+  
+  <modules>
+	<module>BookstoreModel</module>
+	<module>BookstoreWeb</module>
+  </modules>
+</project>

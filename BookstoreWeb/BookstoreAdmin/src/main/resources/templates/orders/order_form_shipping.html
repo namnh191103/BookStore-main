@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<div th:fragment="content" th:remove="tag">
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Ngày giao hàng:</label>
+			<div class="col-sm-10">
+				<input type="number" step="1" class="form-control" th:field="*{deliverDays}" required />
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Ngày giao hàng dự kiến:</label>
+			<div class="col-sm-10">
+				<input type="date" class="form-control" th:field="*{deliverDateOnForm}" required />
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Tên:</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" th:field="*{firstName}" required />
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Họ:</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" th:field="*{lastName}" required />
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Số điện thoại:</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" th:field="*{phoneNumber}" required />
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Địa chỉ:</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" th:field="*{addressLine}" required />
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Phường:</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" th:field="*{ward}" required />
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Thành phố:</label>
+			<div class="col-sm-10">
+				<input type="hidden" name="cityName" id="cityName" th:value="${order.city}" />
+				<select class="form-control" id="city">
+					<option th:each="aCity : ${listCities}" th:value="${aCity.id}"
+						th:selected="${aCity.name == order.city}">[[${aCity.name}]]</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-2 col-form-label">Quận/Huyện:</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" th:field="*{district}" list="listDistricts" />
+				<datalist id="listStricts"></datalist>
+			</div>
+		</div>
+	</div>
+</body>

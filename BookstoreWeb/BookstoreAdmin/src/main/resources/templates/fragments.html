@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="page_head(title, remove)" th:remove="${remove}">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+
+	<title>[[${title}]]</title>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+
+	<!-- Admin css -->
+	<link rel="stylesheet" type="text/css"
+		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+	<link id="pagestyle" th:href="@{/admin-dashboard/css/material-dashboard.css?v=3.1.0}" rel="stylesheet" />
+
+	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<script type="text/javascript" th:src="@{/js/custom_sidebar.js}"></script>
+</head>
+
+<body>
+
+	<div th:fragment="footer" class="text-center m-3">
+		<p>BookStrore Studio</p>
+	</div>
+
+	<th th:fragment="column_link(moduleURL, fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+		<div class="d-flex align-items-center justify-content-center">
+			<a class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 mx-2" th:href="@{${moduleURL} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName} +'&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} 
+			+ ${keyword != null ? '&keyword=' +keyword : ''}}"> [[${columnLabel}]]
+			</a>
+			<i th:if="${sortField == fieldName}"
+				th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></i>
+		</div>
+	</th>
+
+
+	<a th:fragment="page_link(moduleURL, pageNum, label)" class="page-link"
+		th:href="@{${moduleURL} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} +'&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">
+		[[${label}]] </a>
+
+
+	<div class="d-flex justify-content-center" th:fragment="status(enabled, entityName, entityURL)" th:remove="tag">
+		<a th:if="${enabled == true}" class="btn btn-success btn-xl" th:href="@{${entityURL} + '/enabled/false'}"
+			th:title="'Disable this ' + ${entityName}">
+			<i class="fas fa-check-circle"></i>
+		</a>
+
+		<a th:if="${enabled == false}" class="btn btn-secondary btn-xl" th:href="@{${entityURL} + '/enabled/true'}"
+			th:title="'Enable this ' + ${entityName}">
+			<i class="fas fa-circle"></i>
+		</a>
+	</div>
+
+
+
+	<div th:fragment="edit(entityName, editURL)" th:remove="tag">
+		<a class="btn btn-dark btn-xl" th:href="@{${editURL}}" th:title="'Sửa ' + ${entityName}">
+			<i class="fas fa-edit"></i> Sửa
+		</a>
+	</div>
+
+	<div th:fragment="delete(entityName, entityId, deleteURL, visible)" th:remove="tag">
+		<th:block th:if="${visible}">
+			<a class="btn btn-danger btn-xl link-delete" th:href="@{${deleteURL}}" th:entityId="${entityId}"
+				th:title="'Xóa ' + ${entityName}">
+				<i class="fas fa-trash"></i> Xóa
+			</a>
+		</th:block>
+	</div>
+
+
+
+	<!-- Users ==================================== -->
+	<div th:fragment="user_photos" th:remove="tag">
+		<span th:if="${user.photos == null}" class="fa-solid fa-image-portrait fa-2xl icon-dark"> </span>
+		<img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" width="85px" height="90px" />
+	</div>
+
+	<div th:fragment="pagination(moduleURL, entityName)" th:remove="tag" class="">
+		<div class="wrap-pag d-flex justify-content-between px-6 align-items-baseline">
+			<div class="text-pag">
+				<div class="text-center m-1" th:if="${totalItems > 0}">
+					<span>Showing [[${entityName}]] # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]] </span>
+				</div>
+				<div class="text-center m-1" th:unless="${totalItems > 0}">
+					<span>Không Tìm thấy [[${entityName}]]</span>
+				</div>
+			</div>
+
+			<div th:if="${totalPages > 1}">
+				<nav class="pagination-outer" aria-label="Page navigation">
+					<ul class="pagination">
+						<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+							<a class="page-link" th:replace="fragments :: page_link(${moduleURL}, 1, '«')"
+								aria-label="Previous">
+							</a>
+						</li>
+						<li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
+							th:each="i : ${#numbers.sequence(1, totalPages)}">
+							<a class="page-link" th:replace="fragments :: page_link(${moduleURL}, ${i}, ${i})"></a>
+						</li>
+						<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+							<a class="page-link" th:replace="fragments :: page_link(${moduleURL}, ${totalPages} , '»')"
+								aria-label="Next">
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+
+
+	<div th:fragment="seach_form_and_message(moduleURL)">
+		<form th:action="@{${moduleURL}}" class="form-inline justify-content-center">
+			<input type="hidden" name="sortField" th:value="${sortField}" />
+			<input type="hidden" name="sortDir" th:value="${sortDir}" />
+
+			<div class="input-group">
+				<div class="form-outline" data-mdb-input-init>
+					<input type="search" name="keyword" th:value="${keyword}" class="form-control" required
+						placeholder="Nhập để tìm kiếm..." />
+				</div>
+				<button type="submit" class="btn btn-dark btn-xl">
+					<i class="fas fa-search"></i>
+				</button>
+			</div>
+			<button type="button" class="btn btn-dark btn-xl ml-2" onclick="clearFilter()">
+				<i class="fas fa-remove"></i>
+			</button>
+
+		</form>
+
+		<div th:if="${message!= null}" class="alert alert-success text-center mt-3">
+			[[${message}]]
+		</div>
+
+	</div>
+
+
+
+
+	<div th:fragment="search_form_and_message()">
+		<form th:action="@{${moduleURL} + '/page/1'}" class="form-inline m-3">
+			<input type="hidden" name="sortField" th:value="${sortField}" />
+			<input type="hidden" name="sortDir" th:value="${sortDir}" />
+
+			<div class="input-group">
+				<div class="form-outline" data-mdb-input-init>
+					<input type="search" name="keyword" th:value="${keyword}" class="form-control" required
+						placeholder="Nhập để tìm kiếm..." />
+				</div>
+				<button type="submit" class="btn btn-dark btn-xl">
+					<i class="fas fa-search"></i>
+				</button>
+			</div>
+			<button type="button" class="btn btn-dark btn-xl ml-2" onclick="clearFilter()">
+				<i class="fas fa-remove"></i>
+			</button>
+		</form>
+
+		<div th:if="${message != null}" class="alert alert-success text-center">
+			[[${message}]]
+		</div>
+	</div>
+
+	<div th:fragment="format_currency(amount)" th:remove="tag">
+		<span th:if="${CURRENCY_SYMBOL_POSITION == 'Before price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+		[[${#numbers.formatDecimal(amount, 1, 'COMMA', 0, 'POINT')}]]
+		<span th:if="${CURRENCY_SYMBOL_POSITION == 'After price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+	</div>
+
+
+	<div th:fragment="format_time(dateTime)" th:remove="tag">
+		<span th:text="${#dates.format(dateTime, 'dd-MM-yyyy HH:mm:ss')}"></span>
+	</div>
+
+	<div th:fragment="currency_input(amount)" th:remove="tag">
+		<input type="text" readonly class="form-control"
+			th:value="${(CURRENCY_SYMBOL_POSITION == 'Before price' ? CURRENCY_SYMBOL : '') + #numbers.formatDecimal(amount, 1, 'COMMA', 0, 'POINT') + (CURRENCY_SYMBOL_POSITION == 'After price' ? CURRENCY_SYMBOL : '')}">
+	</div>
+
+	<!--   Core JS Files   -->
+	<script th:src="@{/admin-dashboard/js/core/popper.min.js}"></script>
+	<script th:src="@{/admin-dashboard/js/core/bootstrap.min.js}"></script>
+	<script th:src="@{/admin-dashboard/js/plugins/perfect-scrollbar.min.js}"></script>
+	<script th:src="@{/admin-dashboard/js/plugins/smooth-scrollbar.min.js}"></script>
+	<script>
+		var win = navigator.platform.indexOf('Win') > -1;
+		if (win && document.querySelector('#sidenav-scrollbar')) {
+			var options = {
+				damping: '0.5'
+			}
+			Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+		}
+	</script>
+
+	<!-- Github buttons -->
+	<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+	<!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+	<script th:src="@{/admin-dashboard/js/material-dashboard.min.js?v=3.1.0}"></script>
+</body>
+
+</html>

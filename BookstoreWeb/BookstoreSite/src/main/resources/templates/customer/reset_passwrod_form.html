@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Thay đổi mật khẩu', 'none')"/>
+
+<body>
+	
+		<div th:replace="navigation :: header_menu"></div>
+    <div class="container-fluid text-center">   
+		<div class="container text-center">
+            <h2>Thay đổi mật khẩu</h2>
+        
+            <form th:action="@{/reset_password}" method="post" class="mx-auto" style="max-width: 420px;">
+                <input type="hidden" th:value="${token}" name="token">
+        
+                <div class="border border-secondary rounded p-4 shadow-sm">
+                    <div class="form-group mb-3">
+                        <input class="form-control" id="password" type="password" name="password" placeholder="Nhập mật khẩu" required minlength="8" maxlength="20">
+                    </div>
+                    <div class="form-group mb-3">
+                        <input class="form-control" oninput="checkPasswordMatch(this)" type="password" placeholder="Nhập lại mật khẩu" required minlength="8" maxlength="20">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Gửi</button>
+                </div>
+            </form>
+        </div>
+        
+        <div>&nbsp;</div>
+
+		<div th:replace="navigation :: footer_menu"></div>
+		<div>
+
+		</div>
+	</div>
+<script>
+    function checkPasswordMatch(confirmPassword) {
+    if (confirmPassword.value != $("#password").val()) {
+        confirmPassword.setCustomValidity("Mật khẩu không trùng khớp!");
+    } else {
+        confirmPassword.setCustomValidity("");
+    }
+}
+</script>
+</body>
+</html>
